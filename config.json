@@ -1,0 +1,30 @@
+{
+  "development": {
+    "username": "gradmin",
+    "password": "JaBah123JaBah123",
+    "database": "gotreferences",
+    "host": "gotreferences-aurora-instance.cn2s6a0e8tmp.us-east-1.rds.amazonaws.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "production": {
+    "username": "gradmin",
+    "password": "JaBah123JaBah123",
+    "database": "gotreferences",
+    "host": "gotreferences-aurora-instance.cn2s6a0e8tmp.us-east-1.rds.amazonaws.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

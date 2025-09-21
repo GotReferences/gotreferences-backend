@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Logging into ECR"
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 471112842948.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - echo "Pulling Dockerfile from S3..."
+      - aws s3 cp s3://gotreferences-backend/ . --recursive --exclude "*" --include "Dockerfile" --region us-east-1
+      - aws s3 cp s3://gotreferences-backend/ . --recursive --exclude "Dockerfile" --region us-east-1
+      - echo "Building Docker Image..."
+      - docker build -t gotreferences-backend .
+      - docker tag gotreferences-backend:latest 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
+  post_build:
+    commands:
+      - echo "Pushing Docker Image to ECR..."
+      - docker push 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest

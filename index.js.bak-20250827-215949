@@ -1,0 +1,71 @@
+"use strict";
+const express = require("express");
+// express.json() is enough; no body-parser needed
+const blogRouter = require("./src/routes/blog");
+
+const app = express();
+app.use(express.json());
+
+// --- Strict CORS (no wildcard). Only reflect approved origins.
+const allowedOrigins = [
+  /^https?:\/\/(www\.)?gotreferences\.org$/i,
+  /^https?:\/\/.*\.cloudfront\.net$/i
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.some(r => r.test(origin))) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+  next();
+});
+
+app.options("*", (req, res) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.some(r => r.test(origin))) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+  res.status(204).end();
+});
+
+// Routes
+app.use("/api/blog", blogRouter);
+
+// Health endpoints
+app.get("/health", (req, res) => res.status(200).send("OK"));
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+const { Pool } = require('pg');
+const dbPool = new Pool({
+  host: process.env.PGHOST || 'gotreferences-aurora-instance.cn2s6a0e8tmp.us-east-1.rds.amazonaws.com',
+  user: process.env.PGUSER || 'gradmin',
+  password: process.env.PGPASSWORD || 'JaBah123JaBah123',
+  database: process.env.PGDATABASE || 'gotreferences',
+  port: Number(process.env.PGPORT || 5432),
+  ssl: { rejectUnauthorized: false }
+});
+
+// Lightweight connection probe
+app.get('/api/dbcheck', async (req, res) => {
+  try {
+    const r = await dbPool.query('SELECT NOW() as server_time');
+    res.status(200).json({ ok: true, server_time: r.rows[0].server_time });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});

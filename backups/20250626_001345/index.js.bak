@@ -1,0 +1,55 @@
+import { authenticate } from "./utils/cognitoAuth.js";
+
+app.use("/api/users", authenticate);
+
+const express   = require("express");
+const cors      = require("cors");
+const sequelize = require("./db");
+
+// Sequelize models
+require("./models/userModel");
+require("./models/serviceModel");
+require("./models/reviewModel");
+require("./models/projectModel");
+require("./models/blogModel");          // <- ensure Blog model loads
+
+// Routers
+const projectsRouter = require("./routes/projects");
+const reviewsRouter  = require("./routes/reviews");
+const servicesRouter = require("./routes/services");
+const usersRouter    = require("./routes/users");
+const blogRouter     = require("./routes/blog");     // <- NEW
+
+const app = express();
+app.use(express.json());
+
+// CORS — allow site + sub-domains
+app.use(cors({
+  origin: [
+    "https://gotreferences.org",
+    "https://www.gotreferences.org",
+    "https://api.gotreferences.org"
+  ],
+  credentials: true
+}));
+
+// API routes
+app.use("/api/projects", projectsRouter);
+app.use("/api/reviews",  reviewsRouter);
+app.use("/api/services", servicesRouter);
+app.use("/api/users",    usersRouter);
+app.use("/api/blog",     blogRouter);   // <- NEW
+
+// Health check
+    app.get("/api/health", (req, res) => res.status(200).json({ status: "ok" }));
+
+sequelize.sync({ force:false }).then(() => {
+  console.log("DB synced.");
+  const port = process.env.PORT || 3000;
+
+        // Health check endpoint for ALB
+
+
+    // Proper ALB health-check endpoint
+
+  app.listen(port, () => console.log(`Backend listening on ${port}`));

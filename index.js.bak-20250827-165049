@@ -1,0 +1,58 @@
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+const blogRouter = require('./src/routes/blog');
+const cors = require('cors');
+const app = express();
+app.use(express.json());
+const allowedOrigins = [
+  /^https?:\/\/(www\.)?gotreferences\.org$/i,
+  /^https?:\/\/.*\.cloudfront\.net$/i
+];
+app.use((req,res,next) => { res.header('Vary','Origin'); next(); });
+// [removed cors middleware]
+cb(null, allowed);
+  },
+  credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization','X-Requested-With']
+}));
+// [removed cors preflight]
+app.use('/api/blog', blogRouter);app.use(bodyParser.json());
+
+
+app.use('/api/blog', blogRouter);// Health check endpoint for ALB
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// Routes
+app.use("/api/blog", require("./src/routes/blog"));
+
+
+app.use('/api/blog', blogRouter);// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});
+
+// --- injected by automation: simple health endpoint ---
+try {
+  if (typeof app !== 'undefined' && app.get) {
+    app.get('/api/health', (req, res) => {
+      res.status(200).json({
+        status: 'ok',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+      });
+    });
+  }
+} catch (e) { /* no-op */ }
+// --- end injected health endpoint ---
+
+
+
+
+
+

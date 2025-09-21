@@ -1,0 +1,57 @@
+{
+  "volumes": [],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "memory": "512",
+  "family": "gotreferences-backend",
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "executionRoleArn": "arn:aws:iam::471112842948:role/ecsTaskExecutionRole",
+  "placementConstraints": [],
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:20250910173252",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "secrets": [
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:471112842948:secret:gotreferences/prod/db-fvYwEL"
+        },
+        {
+          "name": "DB_PASS",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:471112842948:secret:gotreferences/prod/db-fvYwEL"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:471112842948:secret:gotreferences/prod/db-fvYwEL"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:471112842948:secret:gotreferences/prod/db-fvYwEL"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/gotreferences-backend",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "systemControls": []
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+const app = express();
+app.use(cors({ origin: "*" }));
+app.use(bodyParser.json());
+
+// Health check endpoint for ALB
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// Routes
+app.use("/api/blog", require("./src/routes/blog"));
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});

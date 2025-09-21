@@ -1,0 +1,19 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo "Install phase (placeholder; using Amazon Linux standard image so Docker is already installed)"
+  pre_build:
+    commands:
+      - echo "Logging in to ECR..."
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 471112842948.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - echo "Building Docker image using subfolder Dockerfile..."
+      - docker build -f gotreferences-backend-locals/Dockerfile -t 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest gotreferences-backend-locals
+      - echo "Pushing Docker image..."
+      - docker push 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+

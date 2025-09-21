@@ -1,21 +1,21 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      nodejs: 18
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws --version
-      - eyJwYXlsb2FkIjoicTJsakdJdmY2cGdtTlRibTlLZ09uSVBseDFqbG5xRkRGQ1preWc0eTIwTjdJMWUzaWV6UmRhaUFIVTZ5K2xRcHJyVktwbzhZbDZOd0d5TFdZMG1zZEh5SWEzMHBGZTgwVXJCWlMvWVU1TnJOYlJSRmltaWRSR0xGbEpUTFVkS0dVYm0wMjlWbE0vTU9PUWtBRXlBTmJCSS9qOVNCbkI1aUdvMU9UM2c1RDdLSmw2cnBKdVk0dVJOR3BHK2hDQU95ek9wakFEVjZOaDRWTE10MzZLNWQ4OUFSZmtaVkp5T2hPSHF6Y2dlbG1Va0hYcnJjNUNRNXMvSGNuV1E2ZU9JN0J5VXlvS2dQODdFRnJrdTk4QUMwcGtTSjZjMUhoSm4xdzA3VXB1MkZsMVFYOUM1K1BKR3ArVHBXYllNa1crOXVOT0tQK0lrckNGN2lhTjE5M2lJNGtSdU1maFlMcDIvYmhDVFhkSm00OXF1VjFld21FQ2VHUUd4alMyb05TUEVFK2duL3F3NHpTamNjS05WOE1CYkd2c0tWandMQVNtRnhtMDYzSEVpZEVIR3JBVW43Z08rcytkc1V0eFVoS3VObWhaQk0wUmpndnh6K3Vob0lidTQraXBCT2xsL1BRY1JRZitjQVpvVURLakJsU2RDQUZKY2ZvemlQbmRsL1o4eVN0d2gxQVFSTWQ0RzlOZy9xZTBSSXpad0c5RnNiTVlNb1R3K1RSR0RjWC9JUEhNb3QrSTlwME04czBjb1pwTFdmWlBYSjhIUENuKzl3ek05TTJVajExMm50a3BVSFo1cUxRMDZTZi9nS0N0ZVhwbHBDNXRCbmRKeWd2MHVCcTBlL3FXTzVVdjU2UzRUTWcxM0JIVnhtSFZqQ25PVEw5TTd0aUd2MXVySGI3SmREblhGTGE2Y09tK2dwYmRjM256dEgyRXhnM1RWTUNiSGs2bHgwS1o2eDhQUm5meStkU1R3cVdaazZ4R0YwZWM4cVhPeWlmWkZUNVkvZFlzRTQ0SjE3K1ZsOWx2UDhzNkJNVkFqTEJIV0NxOG9YQ3lpMHVLc2UwUGlITFRKTE14dzVpTW4xMVVqS3FmbmNLb3ZQdUhCd1BSc1FrYVN6NlpLdEVHK0FYTEEvTUN0VUFKNXdOOTlqa3MyYW1QOUpoMmczOVJFcm1vRnl4M3hoaHFrUytua2plV0tKcFhnYVY3N1VHUzdNQWlILzV5NkhWSkdLUmhRNUFvTVJXKzRadDF6a0xRL2s5b0VZOFhIbmhNakZZcVJPZmJFb0ZHMWFsSE1nZjFrQVR5UitEc2syL20vVHZtaEtxTmxZUUlXMkczSUE2VVNqMFdpNWhRT1o4VDdXdkMxSXdBZnV5N2J4MGplZyIsImRhdGFrZXkiOiJBUUVCQUhod20wWWFJU0plUnRKbTVuMUc2dXFlZWtYdW9YWFBlNVVGY2U5UnE4LzE0d0FBQUg0d2ZBWUpLb1pJaHZjTkFRY0dvRzh3YlFJQkFEQm9CZ2txaGtpRzl3MEJCd0V3SGdZSllJWklBV1VEQkFFdU1CRUVERmhWcXpFN3VDZmtOU0VubWdJQkVJQTdKZWt1a0tvYjFSdlBvclltck14cHFacUU3L1Q3YjZlQm5LdTdrd0VyajNLcDg0U0RqbWNtYXV5SEhWSjNBQ0lQRGs2YXF0dWptTUhiQWE0PSIsInZlcnNpb24iOiIyIiwidHlwZSI6IkRBVEFfS0VZIiwiZXhwaXJhdGlvbiI6MTc1ODUzMTAyMH0= | docker login --username AWS --password-stdin 471112842948.dkr.ecr.us-east-1.amazonaws.com
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 471112842948.dkr.ecr.us-east-1.amazonaws.com
   build:
     commands:
       - echo Build started on date
-      - echo Building the Docker image...
       - docker build -t gotreferences-backend .
       - docker tag gotreferences-backend:latest 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
   post_build:
     commands:
-      - echo Pushing the Docker image...
-      - docker push 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
       - echo Build completed on date
+      - docker push 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
 artifacts:
   files: '**/*'

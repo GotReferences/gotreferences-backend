@@ -4,3 +4,4 @@ Trigger pipeline run at 2025-09-21 15:17:26
 Trigger pipeline test after buildspec fix at 2025-09-21 15:23:49
 Trigger pipeline after buildspec.yml fix at 2025-09-21 15:53:55
 Trigger pipeline redeploy test at 2025-09-21 17:47:45
+Trigger pipeline test after ECR policy fix at 2025-09-21 19:28:09

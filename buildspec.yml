@@ -1,21 +1,24 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 18
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 471112842948.dkr.ecr.us-east-1.amazonaws.com
+      - IMAGE_REPO=471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend
+      - IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+
   build:
     commands:
-      - echo Build started on date
-      - docker build -t gotreferences-backend .
-      - docker tag gotreferences-backend:latest 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO:$IMAGE_TAG .
+      - docker push $IMAGE_REPO:$IMAGE_TAG
+
   post_build:
     commands:
-      - echo Build completed on date
-      - docker push 471112842948.dkr.ecr.us-east-1.amazonaws.com/gotreferences-backend:latest
+      - echo Writing imagedefinitions.json...
+      - printf '[{"name":"gotreferences-backend-container","imageUri":"%s"}]' $IMAGE_REPO:$IMAGE_TAG > imagedefinitions.json
+
 artifacts:
-  files: '**/*'
+  files:
+    - imagedefinitions.json

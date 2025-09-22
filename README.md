@@ -8,3 +8,4 @@ Trigger pipeline test after ECR policy fix at 2025-09-21 19:28:09
 Trigger pipeline after ECR policy attach at 2025-09-21 22:15:05
 Trigger pipeline after IAM policy re-attach at 2025-09-21 22:19:20
 Trigger pipeline after switching to ECR FullAccess at 2025-09-21 22:35:23
+Trigger pipeline after FullAccess fix at 2025-09-21 22:46:40

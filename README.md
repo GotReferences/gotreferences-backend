@@ -6,3 +6,4 @@ Trigger pipeline after buildspec.yml fix at 2025-09-21 15:53:55
 Trigger pipeline redeploy test at 2025-09-21 17:47:45
 Trigger pipeline test after ECR policy fix at 2025-09-21 19:28:09
 Trigger pipeline after ECR policy attach at 2025-09-21 22:15:05
+Trigger pipeline after IAM policy re-attach at 2025-09-21 22:19:20
